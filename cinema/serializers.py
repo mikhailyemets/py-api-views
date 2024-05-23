@@ -79,7 +79,10 @@ class GenreSerializer(serializers.Serializer):
         return Genre.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        if "name" in validated_data and validated_data["name"] != instance.name:
+        if (
+            "name" in validated_data
+                and validated_data["name"] != instance.name
+        ):
             if Genre.objects.filter(name=validated_data["name"]).exists():
                 raise serializers.ValidationError(
                     "Genre with this name already exists."
