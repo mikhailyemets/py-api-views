@@ -5,16 +5,18 @@ from cinema.models import Movie, Actor, Genre, CinemaHall
 
 class MovieSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    title = serializers.CharField(max_length=255)
-    description = serializers.CharField()
-    duration = serializers.IntegerField()
+    title = serializers.CharField(max_length=255,  required=True)
+    description = serializers.CharField(required=True)
+    duration = serializers.IntegerField(required=True)
     actors = serializers.PrimaryKeyRelatedField(
         queryset=Actor.objects.all(),
-        many=True
+        many=True,
+        required=True
     )
     genres = serializers.PrimaryKeyRelatedField(
         queryset=Genre.objects.all(),
-        many=True
+        many=True,
+        required=True
     )
 
     def create(self, validated_data):
@@ -47,8 +49,8 @@ class MovieSerializer(serializers.Serializer):
 
 class ActorSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    first_name = serializers.CharField(max_length=255)
-    last_name = serializers.CharField(max_length=255)
+    first_name = serializers.CharField(max_length=255, required=True)
+    last_name = serializers.CharField(max_length=255, required=True)
 
     def create(self, validated_data):
         return Actor.objects.create(**validated_data)
@@ -69,7 +71,7 @@ class ActorSerializer(serializers.Serializer):
 
 class GenreSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=255)
+    name = serializers.CharField(max_length=255, required=True)
 
     def create(self, validated_data):
         if Genre.objects.filter(name=validated_data["name"]).exists():
@@ -94,9 +96,9 @@ class GenreSerializer(serializers.Serializer):
 
 class CinemaHallSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=255)
-    rows = serializers.IntegerField()
-    seats_in_row = serializers.IntegerField()
+    name = serializers.CharField(max_length=255, required=True)
+    rows = serializers.IntegerField(required=True)
+    seats_in_row = serializers.IntegerField(required=True)
 
     def create(self, validated_data):
         return CinemaHall.objects.create(**validated_data)
